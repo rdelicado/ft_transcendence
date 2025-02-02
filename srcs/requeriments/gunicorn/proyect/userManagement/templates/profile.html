@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'home/pong/pong.css' %}">
+	<link rel="stylesheet" href="{% static 'home/nav.css' %}">
+</head>
+<body>
+
+	{% if user.is_authenticated %}
+	{% csrf_token %}	
+	<h1 class="title-cyan-big mb-4">MY PROFILE </h1>
+
+	<div class="container fixed-width text-center">
+		<div class="row">
+			<div class="col-2"></div>
+
+			<div class="col-3">
+				{% if profile.avatar %}
+					<img id="imAvatar" src="{{profile.avatar.url}}" class="img-fluid" width="50" height="50">
+				{% else %}
+					{% load static %}
+					<img id="imAvatar" src="{% static 'home/images/avatar.png' %}" class="img-fluid" width="50" height="50">
+				{% endif %}
+			</div>
+			<div class="col-2 text-start align-self-center">
+				{% if viewing_user == None %}
+					<button id="bEditAvatar" class="btn btn-warning btn-sm" onclick="editAvatar()">Edit</button>
+					<button id="bSaveAvatar" hidden class="btn btn-success btn-sm" onclick="changeAvatar()">Save</button>
+					<button id="bCancelAvatar" hidden class="btn btn-danger btn-sm" onclick="cancelAvatar()">Cancel</button>
+				{% endif %}
+			</div>
+
+			<div class="col-5 text-start align-self-center">
+				<input hidden height="50" id="fileAvatar" type="file" onchange="checkAvatar()" accept="image/*">
+			</div>
+			<div class="w-100 my-1"></div>
+			<div class="col-2"></div>
+
+			<div class="col-3">
+				<h5 class="align-self-center" id="dNick">{{profile.nick}}</h5>
+			</div>
+			<div class="col-2 text-start">
+				{% if viewing_user == None %}
+					<button id="bEdit" class="btn btn-warning btn-sm" onclick="editNick()">Edit</button>
+					<button id="bSave" hidden class="btn btn-success btn-sm" onclick="changeNick()">Save</button>
+					<button id="bCancelNick" hidden class="btn btn-danger btn-sm" onclick="cancelNick()">Cancel</button>
+				{% endif %}
+			</div>
+			<div class="col-5 text-start">
+				<input hidden id="iNick" placeholder="Enter nick" maxlength=15 value=""></input>
+			</div>
+
+		</div>
+		<div class="row">
+			<div id="dErrorAvatar" class="text-danger"></div>
+			<div id="dError" class="text-danger"></div>
+		</div>
+	</div>
+	<div class="container my-3 h5 text-center align-self-center bg-dark title-cyan-big">
+		STATS
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col"></div>
+			<div class="col text-start">
+				Matches:
+			</div>
+			<div class="col text-start">
+				{{num_matches}}
+			</div>
+			<div class="col"></div>
+			<div class="col"></div>
+		</div>
+		<div class="row">
+			<div class="col"></div>
+			<div class="col text-start text-success">
+				Won:
+			</div>
+			<div class="col text-start text-success">
+				{{total_win}}
+			</div>
+			<div class="col text-start text-success">
+				Percentage:
+			</div>	
+			<div class="col text-start text-success">
+				{{percent_win|floatformat:1}}%
+			</div>
+		</div>
+		<div class="row">
+			<div class="col"></div>
+			<div class="col text-start text-danger">
+				Lost:
+			</div>
+			<div class="col text-start text-danger">
+				{{total_lose}}
+			</div>	
+			<div class="col text-start text-danger">
+				Percentage:
+			</div>	
+			<div class="col text-start text-danger">
+				{{percent_lose|floatformat:1}}%
+			</div>
+		</div>
+		<div class="row mt-3">
+			<div class="col"></div>
+			<div class="col text-start">
+				Points:
+			</div>
+			<div class="col text-start">
+				{{total_points}}
+			</div>	
+			<div class="col"></div>
+			<div class="col"></div>
+		</div>
+		<div class="row">
+			<div class="col"></div>
+			<div class="col text-start text-success">
+				Won:
+			</div>
+			<div class="col text-start text-success">
+				{{points_win}}
+			</div>	
+			<div class="col text-start text-success">
+				Percentage:
+			</div>	
+			<div class="col text-start text-success">
+				{{percent_points_win|floatformat:1}}%
+			</div>
+		</div>
+		<div class="row">
+			<div class="col"></div>
+			<div class="col text-start text-danger">
+				Lost:
+			</div>
+			<div class="col text-start text-danger">
+				{{points_lose}}
+			</div>	
+			<div class="col text-start text-danger">
+				Percentage:
+			</div>	
+			<div class="col text-start text-danger">
+				{{percent_points_lose|floatformat:1}}%
+			</div>
+		</div>
+		<br>
+	</div>
+
+{% else %}
+	<p class="orbitron-font-small">log in to have access to your account</p>
+{% endif %}	
+</body>
+</html>
+

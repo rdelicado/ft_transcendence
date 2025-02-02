@@ -1,0 +1,20 @@
+{% extends 'chat.html' %}
+
+{% block content %}
+<div id="boxMessages" data-room="{{ room.id }}" data-user="{{ user.username }}" data-avatar="{{ user_avatar }}">
+    <!-- Private chat messages -->
+    {% for message in room.messages.all %}
+        <div class="message">
+            <strong>{{ message.user.username }}:</strong> {{ message.content }}
+        </div>
+    {% endfor %}
+</div>
+<div class="chat-input">
+    <input type="text" id="inputMessage" placeholder="Type a message...">
+    <button id="btnMessage">Send</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'chat/js/private_chat.js' %}"></script>
+{% endblock %}
